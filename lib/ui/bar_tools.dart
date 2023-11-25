@@ -9,11 +9,12 @@ class BarTools extends StatefulWidget {
 
 class _BarToolsState extends State<BarTools> {
   final _searchInputController = TextEditingController();
+  
 
   @override
   void initState() {
     super.initState();
-    _searchInputController.addListener(printCurrentText);
+    _searchInputController.addListener(_updateFilterText);
   }
 
   @override
@@ -51,7 +52,7 @@ class _BarToolsState extends State<BarTools> {
     ]);
   }
 
-  void printCurrentText() {
-    print(_searchInputController.text);
+  void _updateFilterText() {
+    //_filterParams.title = _searchInputController.text;
   }
 }

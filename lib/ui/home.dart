@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: const BarTools(),
       ),
-      body: const Center(child: NotesList()),
+      body: const NotesList(),
     );
   }
 }
