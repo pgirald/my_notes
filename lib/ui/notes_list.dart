@@ -1,34 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:my_notes/data/notes.dart';
-import 'package:my_notes/data/repos_factory.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:my_notes/data/providers/notes_provider.dart';
+import 'package:my_notes/data/repository/note.dart';
+import 'package:my_notes/data/repository/notes.dart';
+import 'package:my_notes/riverpod_utils/content_wraper.dart';
 
-class NotesList extends StatefulWidget {
-  const NotesList({super.key});
+class NotesList extends ConsumerStatefulWidget {
+  final NotesFilterParams? params;
+
+  const NotesList({super.key, this.params});
 
   @override
-  State<NotesList> createState() => _NotesListState();
+  ConsumerState<NotesList> createState() => _NotesListState();
 }
 
-class _NotesListState extends State<NotesList> {
+class _NotesListState extends ConsumerState<NotesList> {
   @override
   Widget build(BuildContext context) {
-    Notes notes = ReposFactory.notes;
-    return ListView(
-        children: notes
-            .retrieve()
-            .map((note) => ListTile(
-                    title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(note.title),
-                    Text(
-                      "${note.modificationDate.day}/${note.modificationDate.month}/${note.modificationDate.year}",
-                      style: const TextStyle(
-                          fontSize: 12,
-                          color: Color.fromARGB(255, 138, 137, 135)),
-                    )
-                  ],
-                )))
-            .toList());
+    AsyncValue<List<Note>> notesContent =
+        ref.watch(notesProvider(widget.params));
+    return ContentWraper(
+        content: notesContent,
+        builder: (context, notes) {
+          return ListView(
+              children: notes
+                  .map((note) => ListTile(
+                          title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(note.title),
+                          Text(
+                            "${note.modificationDate.day}/${note.modificationDate.month}/${note.modificationDate.year}",
+                            style: const TextStyle(
+                                fontSize: 12,
+                                color: Color.fromARGB(255, 138, 137, 135)),
+                          )
+                        ],
+                      )))
+                  .toList());
+        });
   }
 }

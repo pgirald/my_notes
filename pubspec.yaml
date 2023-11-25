@@ -43,6 +43,8 @@ dev_dependencies:
     sdk: flutter
   riverpod_generator: ^2.3.5
   riverpod_lint: ^2.3.3
+  build_runner:
+  custom_lint:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

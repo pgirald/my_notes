@@ -1,9 +1,13 @@
-import 'package:my_notes/data/content.dart';
-import 'package:my_notes/data/contents.dart';
+import 'package:my_notes/data/repository/content.dart';
+import 'package:my_notes/data/repository/contents.dart';
+import 'package:my_notes/data/repository/mock_repository.dart';
 
-class MockContents extends Contents {
+class MockContents implements Contents {
   @override
-  Content get(int id) => _contents[id];
+  Future<Content> get(int id) async {
+    Future.delayed(MockRepository.delay);
+    return _contents[id];
+  }
 }
 
 List<Content> _contents = [
