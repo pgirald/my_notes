@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: BarTools(onFilterRequested: _setFilterParams),
+        title: BarTools(onParamsChanged: _setFilterParams),
       ),
       body: Center(child: NotesList(params: _params)),
     );

@@ -26,7 +26,7 @@ void main() {
         home: Scaffold(
           appBar: AppBar(
               title: BarTools(
-            onFilterRequested: (params) => assignSearchTerm(context, params),
+            onParamsChanged: (params) => assignSearchTerm(context, params),
           )),
         ),
       );

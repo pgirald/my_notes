@@ -3,9 +3,9 @@ import 'package:my_notes/data/repository/notes.dart';
 import 'package:my_notes/widget_utils/date_field.dart';
 
 class BarTools extends StatefulWidget {
-  final void Function(NotesFilterParams)? onFilterRequested;
+  final void Function(NotesFilterParams?)? onParamsChanged;
 
-  const BarTools({super.key, this.onFilterRequested});
+  const BarTools({super.key, this.onParamsChanged});
 
   @override
   State<BarTools> createState() => _BarToolsState();
@@ -14,7 +14,8 @@ class BarTools extends StatefulWidget {
 class _BarToolsState extends State<BarTools> {
   final _searchInputController = TextEditingController();
 
-  DateTime? _lowerDate, _upperDate;
+  final DateFieldController _lowerDateController = DateFieldController();
+  final DateFieldController _upperDateController = DateFieldController();
 
   @override
   void initState() {
@@ -30,6 +31,9 @@ class _BarToolsState extends State<BarTools> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            IconButton(
+                onPressed: _removeFilterRequested,
+                icon: const Icon(Icons.cleaning_services)),
             SizedBox(
                 width: 200,
                 height: 40,
@@ -46,7 +50,11 @@ class _BarToolsState extends State<BarTools> {
             IconButton(
                 key: const Key("searchButton"),
                 onPressed: () {
-                  _notifyFilterRequest(null, null, _searchInputController.text);
+                  _notifyParamsChange((
+                    lowerDate: _lowerDateController.date,
+                    upperDate: _upperDateController.date,
+                    title: _searchInputController.text
+                  ));
                 },
                 color: Colors.white,
                 icon: const Icon(Icons.search)),
@@ -92,42 +100,42 @@ class _BarToolsState extends State<BarTools> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: DateField(
-                      label: "Upper date", onDateChanged: _setUpperDate),
+                    controller: _lowerDateController,
+                    label: "Lower date",
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: DateField(
-                    label: "Lower date",
-                    onDateChanged: _setLowerDate,
-                  ),
+                      controller: _upperDateController, label: "Upper date"),
                 ),
               ],
             ),
             actions: [
               TextButton(
                   onPressed: () {
-                    _notifyFilterRequest(
-                        _lowerDate, _upperDate, _searchInputController.text);
+                    _notifyParamsChange((
+                      lowerDate: _lowerDateController.date,
+                      upperDate: _upperDateController.date,
+                      title: _searchInputController.text
+                    ));
                     Navigator.of(context).pop();
                   },
                   child: const Text("Filter"))
             ],
           ));
 
-  void _setLowerDate(DateTime? date) {
-    _lowerDate = date;
-  }
-
-  void _setUpperDate(DateTime? date) {
-    _upperDate = date;
-  }
-
-  void _notifyFilterRequest(
-      DateTime? lowerDate, DateTime? upperDate, String title) {
-    if (widget.onFilterRequested == null) {
+  void _notifyParamsChange(NotesFilterParams? params) {
+    if (widget.onParamsChanged == null) {
       return;
     }
-    widget.onFilterRequested!(
-        (lowerDate: lowerDate, upperDate: upperDate, title: title));
+    widget.onParamsChanged!(params);
+  }
+
+  void _removeFilterRequested() {
+    _searchInputController.clear();
+    _lowerDateController.clear();
+    _upperDateController.clear();
+    _notifyParamsChange(null);
   }
 }

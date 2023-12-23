@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateField extends StatefulWidget {
-  final String? format;
   final DateTime? initValue;
+  final DateFieldController? controller;
   final Color color;
   final String label;
   final void Function(DateTime?)? onDateChanged;
 
   const DateField({
     super.key,
-    this.format,
     this.initValue,
     this.color = Colors.blueAccent,
     this.onDateChanged,
     this.label = "",
+    this.controller,
   });
 
   @override
@@ -22,23 +22,19 @@ class DateField extends StatefulWidget {
 }
 
 class _DateFieldState extends State<DateField> {
-  late final DateFormat _formatter;
-  final _dateInputController = TextEditingController();
+  late final DateFieldController _controller;
 
   @override
   void initState() {
     super.initState();
-    if (widget.format != null) {
-      _formatter = DateFormat(widget.format);
+
+    if (widget.controller != null) {
+      _controller = widget.controller!;
     } else {
-      _formatter = DateFormat("d/MMM/y");
+      _controller = DateFieldController();
     }
-    if (widget.initValue != null) {
-      _formatter.format(widget.initValue!);
-    } else {
-      _defaultDisplay;
-    }
-    _dateInputController.text = _defaultDisplay;
+
+    _controller.date ??= widget.initValue;
   }
 
   @override
@@ -49,7 +45,7 @@ class _DateFieldState extends State<DateField> {
           child: SizedBox(
             height: 35,
             child: TextField(
-                controller: _dateInputController,
+                controller: _controller._textController,
                 enabled: false,
                 textAlign: TextAlign.center,
                 textAlignVertical: TextAlignVertical.center,
@@ -68,16 +64,18 @@ class _DateFieldState extends State<DateField> {
             onPressed: () async {
               var pickedDate = await showDatePicker(
                   context: context,
-                  initialDate: widget.initValue ?? DateTime.now(),
+                  initialDate: _controller.date ?? DateTime.now(),
                   firstDate: DateTime(1900),
                   lastDate: DateTime(2100));
+
               if (pickedDate == null) {
                 return;
               }
 
-              _dateInputController.text = _formatter.format(pickedDate);
+              _controller.date = pickedDate;
+
               if (widget.onDateChanged != null) {
-                widget.onDateChanged!(pickedDate);
+                widget.onDateChanged!(_controller.date);
               }
             },
             color: widget.color,
@@ -86,10 +84,11 @@ class _DateFieldState extends State<DateField> {
             )),
         IconButton(
             onPressed: () {
+              _controller.clear();
+
               if (widget.onDateChanged != null) {
                 widget.onDateChanged!(null);
               }
-              _dateInputController.text = _defaultDisplay;
             },
             color: widget.color,
             icon: Icon(
@@ -99,6 +98,35 @@ class _DateFieldState extends State<DateField> {
       ],
     );
   }
+}
+
+class DateFieldController {
+  late TextEditingController _textController;
+  late final DateFormat _formatter;
+  DateTime? _date;
+
+  DateFieldController([this._date, String? format]) {
+    _textController = TextEditingController();
+
+    if (format != null) {
+      _formatter = DateFormat(format);
+    } else {
+      _formatter = DateFormat("d/MMM/y");
+    }
+  }
+
+  clear() {
+    _date = null;
+    _textController.text = _defaultDisplay;
+  }
+
+  set date(DateTime? value) {
+    _date = value;
+    _textController.text =
+        _date == null ? _defaultDisplay : _formatter.format(_date!);
+  }
+
+  DateTime? get date => _date;
 
   String get _defaultDisplay {
     return "-" * _formatter.pattern!.length * 2;
