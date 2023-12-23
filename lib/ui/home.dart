@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_notes/data/repository/notes.dart';
 import 'package:my_notes/ui/bar_tools.dart';
 import 'package:my_notes/ui/notes_list.dart';
 
@@ -12,23 +13,34 @@ class MyNotes extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(title: 'Flutter Demo Home Page'),
+      home: const HomePage(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.title});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
-  final String title;
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  NotesFilterParams? _params;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const BarTools(),
+        title: BarTools(onFilterRequested: _setFilterParams),
       ),
-      body: const NotesList(),
+      body: Center(child: NotesList(params: _params)),
     );
+  }
+
+  _setFilterParams(NotesFilterParams? params) {
+    setState(() {
+      _params = params;
+    });
   }
 }

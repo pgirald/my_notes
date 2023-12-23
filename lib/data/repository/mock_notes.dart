@@ -12,10 +12,10 @@ class MockNotes implements Notes {
     }
     return _notes
         .where((note) =>
-            note.title.contains(params.title) && params.lowerDate != null ||
-            note.modificationDate >= params.lowerDate! ||
-            params.upperDate != null ||
-            note.modificationDate <= params.upperDate!)
+            note.title.contains(params.title) && (params.lowerDate == null ||
+            note.modificationDate >= params.lowerDate!) &&
+            (params.upperDate == null ||
+            note.modificationDate <= params.upperDate!))
         .toList();
   }
 }
