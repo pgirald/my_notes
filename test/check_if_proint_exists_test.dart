@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_notes/ui/notes_list.dart';
+import 'package:my_notes/src/features/notes/widgets/notes_list.dart';
 
 void main() {
   testWidgets('Check if element named "proin" is in the list',

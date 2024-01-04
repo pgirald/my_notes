@@ -1,0 +1,6 @@
+1. Reestructurar
+2. Lenguaje
+3. Documentacion tests completa
+4. Realización de tests
+5. Inyección de dependencias
+6. Edición de documentos
