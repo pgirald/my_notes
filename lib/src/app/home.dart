@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_notes/src/features/notes/src/data/notes.dart';
-import 'package:my_notes/src/ui/bar_tools.dart';
+import 'package:my_notes/src/features/notes/src/data/notes_storage.dart';
+import 'package:my_notes/src/app/bar_tools.dart';
 import 'package:my_notes/src/features/notes/widgets/notes_list.dart';
 
 class MyNotes extends StatelessWidget {

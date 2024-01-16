@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:my_notes/src/features/notes/src/providers/notes_provider.dart';
 import 'package:my_notes/src/features/notes/src/data/note.dart';
-import 'package:my_notes/src/features/notes/src/data/notes.dart';
+import 'package:my_notes/src/features/notes/src/data/notes_storage.dart';
 import 'package:my_notes/utils/riverpod/content_wraper.dart';
 
 class NotesList extends ConsumerStatefulWidget {

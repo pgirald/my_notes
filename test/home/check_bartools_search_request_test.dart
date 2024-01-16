@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test/flutter_test.dart' as test;
-import 'package:my_notes/src/features/notes/src/data/notes.dart';
-import 'package:my_notes/src/ui/bar_tools.dart';
+import 'package:my_notes/src/features/notes/src/data/notes_storage.dart';
+import 'package:my_notes/src/app/bar_tools.dart';
 
 void main() {
   testWidgets('Check if onTestRequested triggers succesfully',

@@ -6,6 +6,6 @@ typedef NotesFilterParams = ({
   DateTime? upperDate
 });
 
-abstract class Notes {
+abstract class NotesStorage {
   Future<List<Note>> retrieve([NotesFilterParams? params]);
 }

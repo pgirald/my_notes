@@ -1,12 +1,11 @@
-import 'package:my_notes/src/data/repository/mock_repository.dart';
 import 'package:my_notes/src/features/notes/src/data/note.dart';
-import 'package:my_notes/src/features/notes/src/data/notes.dart';
+import 'package:my_notes/src/features/notes/src/data/notes_storage.dart';
 import 'package:my_notes/utils/general/date_compare.dart';
 
-class MockNotes implements Notes {
+class MockNotesStorage implements NotesStorage {
   @override
   Future<List<Note>> retrieve([NotesFilterParams? params]) async {
-    await Future.delayed(MockRepository.delay);
+    await Future.delayed(const Duration(seconds: 1));
     if (params == null) {
       return _notes;
     }
